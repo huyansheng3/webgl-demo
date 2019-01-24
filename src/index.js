@@ -9,14 +9,20 @@ const gl = webglDom.getContext("webgl");
 const program = createProgram(gl, triangle_v, triangle_f);
 console.log(program);
 const positionAttributeLocation = gl.getAttribLocation(program, "a_position");
-console.log(positionAttributeLocation);
+console.log("positionAttributeLocation", positionAttributeLocation);
+
+var resolutionUniformLocation = gl.getUniformLocation(program, "u_resolution");
+console.log("resolutionUniformLocation", resolutionUniformLocation);
+
 const positionBuffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
 console.log(gl.ARRAY_BUFFER);
 
-const positions = [0, 0, 0, 0.5, 0.7, 0];
+const positions = [10, 20, 80, 20, 10, 30, 10, 30, 80, 20, 80, 30];
 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+
+var colorUniformLocation = gl.getUniformLocation(program, "u_color");
 
 webglUtils.resizeCanvasToDisplaySize(gl.canvas);
 gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
@@ -25,6 +31,16 @@ gl.clearColor(0, 0, 0, 0);
 gl.clear(gl.COLOR_BUFFER_BIT);
 
 gl.useProgram(program);
+
+gl.uniform2f(resolutionUniformLocation, gl.canvas.width, gl.canvas.height);
+
+gl.uniform4f(
+  colorUniformLocation,
+  Math.random(),
+  Math.random(),
+  Math.random(),
+  1
+);
 
 gl.enableVertexAttribArray(positionAttributeLocation);
 
@@ -46,5 +62,5 @@ gl.vertexAttribPointer(
 
 var primitiveType = gl.TRIANGLES;
 var offset = 0;
-var count = 3;
+var count = 6;
 gl.drawArrays(primitiveType, offset, count);
