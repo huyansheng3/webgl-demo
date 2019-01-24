@@ -3,64 +3,32 @@ import triangle_f from "./shaders/triangle_f.glsl";
 import triangle_v from "./shaders/triangle_v.glsl";
 import "./index.css";
 
-const webglDom = document.getElementById("webgl");
-const gl = webglDom.getContext("webgl");
+function main() {
+  const webglDom = document.getElementById("webgl");
+  const gl = webglDom.getContext("webgl");
 
-const program = createProgram(gl, triangle_v, triangle_f);
-console.log(program);
-const positionAttributeLocation = gl.getAttribLocation(program, "a_position");
-console.log("positionAttributeLocation", positionAttributeLocation);
+  // Only continue if WebGL is available and working
+  if (!gl) {
+    alert(
+      "Unable to initialize WebGL. Your browser or machine may not support it."
+    );
+    return;
+  }
 
-var resolutionUniformLocation = gl.getUniformLocation(program, "u_resolution");
-console.log("resolutionUniformLocation", resolutionUniformLocation);
+  // Set clear color to black, fully opaque
+  gl.clearColor(0.0, 0.5, 1.0, 1.0);
+  // Clear the color buffer with specified clear color
+  gl.clear(gl.COLOR_BUFFER_BIT);
+  console.log(gl.COLOR_BUFFER_BIT, gl);
 
-const positionBuffer = gl.createBuffer();
-gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+  // for (let key in gl) {
+  //   console.log(key, gl[key]);
+  // }
 
-console.log(gl.ARRAY_BUFFER);
+  //   常量名称	值	说明
+  // DEPTH_BUFFER_BIT	0x00000100	通过 clear 来清除深度缓冲区。
+  // STENCIL_BUFFER_BIT	0x00000400	通过 clear 来清除当前模板缓冲区。
+  // COLOR_BUFFER_BIT	0x00004000	通过 clear 来清除颜色缓冲区。
+}
 
-const positions = [10, 20, 80, 20, 10, 30, 10, 30, 80, 20, 80, 30];
-gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
-
-var colorUniformLocation = gl.getUniformLocation(program, "u_color");
-
-webglUtils.resizeCanvasToDisplaySize(gl.canvas);
-gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-
-gl.clearColor(0, 0, 0, 0);
-gl.clear(gl.COLOR_BUFFER_BIT);
-
-gl.useProgram(program);
-
-gl.uniform2f(resolutionUniformLocation, gl.canvas.width, gl.canvas.height);
-
-gl.uniform4f(
-  colorUniformLocation,
-  Math.random(),
-  Math.random(),
-  Math.random(),
-  1
-);
-
-gl.enableVertexAttribArray(positionAttributeLocation);
-
-// 告诉属性怎么从positionBuffer中读取数据 (ARRAY_BUFFER)
-var size = 2; // 每次迭代运行提取两个单位数据
-var type = gl.FLOAT; // 每个单位的数据类型是32位浮点型
-var normalize = false; // 不需要归一化数据
-var stride = 0; // 0 = 移动单位数量 * 每个单位占用内存（sizeof(type)）
-// 每次迭代运行运动多少内存到下一个数据开始点
-var offset = 0; // 从缓冲起始位置开始读取
-gl.vertexAttribPointer(
-  positionAttributeLocation,
-  size,
-  type,
-  normalize,
-  stride,
-  offset
-);
-
-var primitiveType = gl.TRIANGLES;
-var offset = 0;
-var count = 6;
-gl.drawArrays(primitiveType, offset, count);
+main();
