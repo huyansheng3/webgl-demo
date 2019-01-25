@@ -20,6 +20,15 @@ export function createProgram(gl, vsource, fsource) {
   createShader(vsource, gl.VERTEX_SHADER);
   createShader(fsource, gl.FRAGMENT_SHADER);
   gl.linkProgram(program);
+
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+    alert(
+      "Unable to initialize the shader program: " +
+        gl.getProgramInfoLog(program)
+    );
+    return null;
+  }
+
   return program;
 }
 
