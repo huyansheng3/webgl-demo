@@ -316,6 +316,7 @@ function drawScene(gl, programInfo, buffers, deltaTime) {
     const vertexCount = 36;
     const type = gl.UNSIGNED_SHORT;
     const offset = 0;
+    // 取ELEMENT_ARRAY_BUFFER 的数据去绘制
     gl.drawElements(gl.TRIANGLES, vertexCount, type, offset);
   }
 
